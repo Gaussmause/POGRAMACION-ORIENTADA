@@ -1,0 +1,34 @@
+class Persona:
+    # 1. El Constructor con todos los atributos (incluidos los del Ejercicios propuestos)
+    def __init__(self, nombre, apellido, documento, anio_nacimiento, pais_nacimiento, genero):
+        self.nombre = nombre
+        self.apellido = apellido
+        self.documento = documento
+        self.anio_nacimiento = anio_nacimiento
+
+        # Nuevos atributos del Ejercicios propuestos
+        self.pais_nacimiento = pais_nacimiento
+        self.genero = genero  # Se espera que sea 'H' o 'M'
+
+    # 2. Método para imprimir todos los atributos en pantalla
+    def imprimir(self):
+        print("### Datos de la Persona ###")
+        print(f"Nombre completo: {self.nombre} {self.apellido}")
+        print(f"Documento de identidad: {self.documento}")
+        print(f"Año de nacimiento: {self.anio_nacimiento}")
+        # imprimir Nuevos atributos del Ejercicios propuestos
+        print(f"País de nacimiento: {self.pais_nacimiento}")
+        print(f"Género: {self.genero}")
+        print("-" * 27)
+
+# 3. El método "main" e
+if __name__ == "__main__":
+    # Creación del primer objeto
+    persona1 = Persona("Pedro", "Perez", "1053121010", 1998, "Colombia", "H")
+
+    # Creación del segundo objeto
+    persona2 = Persona("Luis", "Leon", "1053223344", 2001, "Reino Unido", "M")
+
+    # Mostrando los valores en pantalla llamando al método imprimir
+    persona1.imprimir()
+    persona2.imprimir()
