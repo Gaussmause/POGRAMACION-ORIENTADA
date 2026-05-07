@@ -59,9 +59,9 @@ class CuentaBancaria:
 if __name__ == "__main__":
     # 1. Creamos la cuenta bancaria
     mi_cuenta = CuentaBancaria(
-        nombres="Jose Isaac",
-        apellidos="Garcia Martínez",
-        numero_cuenta="098-76543-21",
+        nombres="Pedro",
+        apellidos="Perez",
+        numero_cuenta="123456789",
         tipo_cuenta=TipoCuenta.AHORROS,
         porcentaje_interes_mensual=1.5
     )
