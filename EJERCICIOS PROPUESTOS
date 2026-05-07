@@ -1,0 +1,500 @@
+class Persona:
+    # 1. El Constructor con todos los atributos (incluidos los del Ejercicios propuestos)
+    def __init__(self, nombre, apellido, documento, anio_nacimiento, pais_nacimiento, genero):
+        self.nombre = nombre
+        self.apellido = apellido
+        self.documento = documento
+        self.anio_nacimiento = anio_nacimiento
+
+        # Nuevos atributos del Ejercicios propuestos
+        self.pais_nacimiento = pais_nacimiento
+        self.genero = genero  # Se espera que sea 'H' o 'M'
+
+    # 2. Método para imprimir todos los atributos en pantalla
+    def imprimir(self):
+        print("### Datos de la Persona ###")
+        print(f"Nombre completo: {self.nombre} {self.apellido}")
+        print(f"Documento de identidad: {self.documento}")
+        print(f"Año de nacimiento: {self.anio_nacimiento}")
+        # imprimir Nuevos atributos del Ejercicios propuestos
+        print(f"País de nacimiento: {self.pais_nacimiento}")
+        print(f"Género: {self.genero}")
+        print("-" * 27)
+
+# 3. El método "main" e
+if __name__ == "__main__":
+    # Creación del primer objeto
+    persona1 = Persona("Pedro", "Perez", "1053121010", 1998, "Colombia", "H")
+
+    # Creación del segundo objeto
+    persona2 = Persona("Luis", "Leon", "1053223344", 2001, "Reino Unido", "M")
+
+    # Mostrando los valores en pantalla llamando al método imprimir
+    persona1.imprimir()
+    persona2.imprimir()
+
+
+#PROBLEMA 2
+from enum import Enum
+
+# 1. Definición del Enumerador para el tipo de planeta
+class TipoPlaneta(Enum):
+    GASEOSO = "Gaseoso"
+    TERRESTRE = "Terrestre"
+    ENANO = "Enano"
+
+class Planeta:
+    # 2. Constructor con valores por defecto (cumpliendo las reglas de inicialización)
+    def __init__(self, nombre=None, cantidad_satelites=0, masa_kg=0.0,volumen_km3=0.0, diametro_km=0, distancia_sol_millones_km=0,
+                 tipo=TipoPlaneta.TERRESTRE, observable=False,periodo_orbital_anios=0.0, periodo_rotacion_dias=0.0):
+
+        self.nombre = nombre
+        self.cantidad_satelites = cantidad_satelites
+        self.masa_kg = masa_kg
+        self.volumen_km3 = volumen_km3
+        self.diametro_km = diametro_km
+        self.distancia_sol_millones_km = distancia_sol_millones_km
+        self.tipo = tipo
+        self.observable = observable
+
+        # Nuevos atributos del Ejercicios propuestos
+        self.periodo_orbital_anios = periodo_orbital_anios
+        self.periodo_rotacion_dias = periodo_rotacion_dias
+
+    # 3. Método para imprimir todos los atributos
+    def imprimir(self):
+        print(f"\n### Planeta: {self.nombre} ###")
+        print(f"Satélites: {self.cantidad_satelites}")
+        print(f"Masa: {self.masa_kg} kg")
+        print(f"Volumen: {self.volumen_km3} km³")
+        print(f"Diámetro: {self.diametro_km} km")
+        print(f"Distancia al Sol: {self.distancia_sol_millones_km} millones de km")
+        print(f"Tipo: {self.tipo.value}")  # Usamos .value para obtener el texto del Enum
+        print(f"Observable a simple vista: {'Sí' if self.observable else 'No'}")
+        print(f"Periodo Orbital: {self.periodo_orbital_anios} años")
+        print(f"Periodo de Rotación: {self.periodo_rotacion_dias} días")
+
+    # 4. Método para calcular densidad
+    def calcular_densidad(self):
+        if self.volumen_km3 == 0:
+            return 0.0
+        return self.masa_kg / self.volumen_km3
+
+    # 5. Método para determinar si es exterior
+    def es_exterior(self):
+        # 1 UA = 149597870 Km
+        # Un planeta es exterior si está más allá del cinturón (límite > 3.4 UA)
+        limite_exterior_km = 3.4 * 149597870
+
+        # El atributo del planeta está en MILLONES de km, así que lo multiplicamos por 1,000,000
+        distancia_real_km = self.distancia_sol_millones_km * 1_000_000
+
+        return distancia_real_km > limite_exterior_km
+
+# 6. Bloque Main
+if __name__ == "__main__":
+    # Creamos a Júpiter (Planeta exterior y Gaseoso)
+
+    jupiter = Planeta(
+        nombre="Júpiter",
+        cantidad_satelites=95,
+        masa_kg=1.898e27,
+        volumen_km3=1.431e15,
+        diametro_km=139820,
+        distancia_sol_millones_km=778,
+        tipo=TipoPlaneta.GASEOSO,
+        observable=True,
+        periodo_orbital_anios=11.86,
+        periodo_rotacion_dias=0.41
+    )
+
+    # Creamos a la Tierra (Planeta interior y Terrestre)
+    tierra = Planeta(
+        nombre="Tierra",
+        cantidad_satelites=1,
+        masa_kg=5.972e24,
+        volumen_km3=1.083e12,
+        diametro_km=12742,
+        distancia_sol_millones_km=149, # Aprox 1 UA (149 millones de km)
+        tipo=TipoPlaneta.TERRESTRE,
+        observable=True,
+        periodo_orbital_anios=1.0,
+        periodo_rotacion_dias=1.0
+    )
+
+    # Mostramos los valores de los atributos usando el método
+    jupiter.imprimir()
+    tierra.imprimir()
+
+    # Mostramos densidad y si es exterior
+    print("\n### Cálculos de Júpiter ###")
+    print(f"Densidad: {jupiter.calcular_densidad():.2e} kg/km³")
+    print(f"¿Es un planeta exterior?: {'Sí' if jupiter.es_exterior() else 'No'}")
+
+    print("\n### Cálculos de la Tierra ###")
+    print(f"Densidad: {tierra.calcular_densidad():.2e} kg/km³")
+    print(f"¿Es un planeta exterior?: {'Sí' if tierra.es_exterior() else 'No'}")
+
+#PROBLEMA 3
+from enum import Enum
+
+# 1. Definimos los Enumeradores
+class TipoCombustible(Enum):
+    GASOLINA = "Gasolina"
+    BIOETANOL = "Bioetanol"
+    DIESEL = "Diésel"
+    BIODIESEL = "Biodiésel"
+    GAS_NATURAL = "Gas natural"
+
+class TipoAutomovil(Enum):
+    CIUDAD = "Carro de ciudad"
+    SUBCOMPACTO = "Subcompacto"
+    COMPACTO = "Compacto"
+    FAMILIAR = "Familiar"
+    EJECUTIVO = "Ejecutivo"
+    SUV = "SUV"
+
+class Color(Enum):
+    BLANCO = "Blanco"
+    NEGRO = "Negro"
+    ROJO = "Rojo"
+    NARANJA = "Naranja"
+    AMARILLO = "Amarillo"
+    VERDE = "Verde"
+    AZUL = "Azul"
+    VIOLETA = "Violeta"
+
+class Automovil:
+    # 2. Constructor
+    def __init__(self, marca, modelo, motor, tipo_combustible, tipo_automovil,
+                 num_puertas, cant_asientos, vel_maxima, color, es_automatico=True):
+        # Atributos protegidos con __
+        self.__marca = marca
+        self.__modelo = modelo
+        self.__motor = motor
+        self.__tipo_combustible = tipo_combustible
+        self.__tipo_automovil = tipo_automovil
+        self.__num_puertas = num_puertas
+        self.__cant_asientos = cant_asientos
+        self.__vel_maxima = vel_maxima
+        self.__color = color
+        self.__velocidad_actual = 0.0
+
+        # Nuevos atributos del Ejercicios propuestos
+        self.__es_automatico = es_automatico
+        self.__valor_total_multas = 0.0
+        self.__cantidad_multas = 0
+
+    # 3. Métodos Get y Set
+    def get_velocidad_actual(self):
+        return self.__velocidad_actual
+
+    def set_velocidad_actual(self, velocidad):
+        if velocidad <= self.__vel_maxima:
+            self.__velocidad_actual = velocidad
+        else:
+            self.__velocidad_actual = self.__vel_maxima
+            print(f"Error: No puedes establecer una velocidad mayor a la máxima ({self.__vel_maxima} km/h).")
+
+    # Get y Set propuestos para el atributo es_automatico
+    def get_es_automatico(self):
+        return self.__es_automatico
+
+    def set_es_automatico(self, valor_booleano):
+        self.__es_automatico = valor_booleano
+
+    # 4. Métodos de control de velocidad y multas (Ejercicios propuestos)
+    def acelerar(self, incremento):
+        nueva_velocidad = self.__velocidad_actual + incremento
+
+        if nueva_velocidad > self.__vel_maxima:
+            self.__velocidad_actual = self.__vel_maxima
+            # Generamos la multa según el ejercicio propuesto
+            valor_multa = 150000.0  # Un valor fijo de ejemplo
+            self.__cantidad_multas += 1
+            self.__valor_total_multas += valor_multa
+            print(f"INFRACCIÓN Intentó acelerar a {nueva_velocidad} km/h superando el límite de {self.__vel_maxima} km/h.")
+            print(f"Se ha generado una multa de ${valor_multa}. Total acumulado: ${self.__valor_total_multas}")
+        else:
+            self.__velocidad_actual = nueva_velocidad
+            print(f"Acelerando, velocidad actual: {self.__velocidad_actual} km/h")
+
+    def desacelerar(self, decremento):
+        nueva_velocidad = self.__velocidad_actual - decremento
+
+        if nueva_velocidad < 0:
+            self.__velocidad_actual = 0
+            print("No es posible desacelerar a una velocidad negativa. El vehículo se ha detenido.")
+        else:
+            self.__velocidad_actual = nueva_velocidad
+            print(f"Desacelerando: velocidad actual: {self.__velocidad_actual} km/h")
+
+    def frenar(self):
+        self.__velocidad_actual = 0
+        print("Frenado total. Velocidad actual: 0 km/h")
+
+    def tiempo_estimado_llegada(self, distancia_km):
+        if self.__velocidad_actual == 0:
+            return "El vehículo está detenido. Tiempo de llegada infinito."
+        tiempo = distancia_km / self.__velocidad_actual
+        return f"Tiempo estimado: {tiempo:.2f} horas"
+
+    # Métodos para las multas
+    def tiene_multas(self):
+        return self.__cantidad_multas > 0
+
+    def total_multas(self):
+        return self.__valor_total_multas
+
+    # 5. Método Imprimir
+    def imprimir(self):
+        print("\n### Especificaciones del Automóvil ###")
+        print(f"Marca: {self.__marca} / Modelo: {self.__modelo} / Motor: {self.__motor}L")
+        print(f"Tipo: {self.__tipo_automovil.value} / Combustible: {self.__tipo_combustible.value}")
+        print(f"Color: {self.__color.value} / Transmisión Automática: {'Sí' if self.__es_automatico else 'No'}")
+        print(f"Puertas: {self.__num_puertas} / Asientos: {self.__cant_asientos}")
+        print(f"Velocidad Máxima: {self.__vel_maxima} km/h")
+        print(f"Velocidad Actual: {self.__velocidad_actual} km/h")
+        print("\n")
+
+# 6. Método Main
+if __name__ == "__main__":
+    # Creamos un automóvil con velocidad máxima de 110 km/h
+    mi_carro = Automovil(
+        marca="Ford",
+        modelo=2018,
+        motor=3,
+        tipo_combustible=TipoCombustible.GASOLINA,
+        tipo_automovil=TipoAutomovil.EJECUTIVO,
+        num_puertas=5,
+        cant_asientos=6,
+        vel_maxima=250,
+        color=Color.NEGRO,
+        es_automatico=True
+    )
+
+    mi_carro.imprimir()
+
+    # Secuencia solicitada en el enunciado
+    print("### Iniciando recorrido ###")
+
+    # 1. Colocar su velocidad actual en 100 km/h usando el Set
+    mi_carro.set_velocidad_actual(100)
+    print(f"Velocidad configurada a: {mi_carro.get_velocidad_actual()} km/h")
+
+    # 2. Aumentar su velocidad en 20 km/h (¡Esto superará la vel. máxima de 110 y generará multa!)
+    mi_carro.acelerar(20)
+
+    # 3. Decrementar su velocidad en 50 km/h
+    mi_carro.desacelerar(50)
+
+    # 4. Frenar
+    mi_carro.frenar()
+
+    # Verificamos multas al final
+    if mi_carro.tiene_multas():
+        print(f"\nReporte de tránsito: El vehículo tiene multas por un total de ${mi_carro.total_multas()}")
+
+#PROBLEMA 4
+import math
+
+# 1. Clase Círculo
+class Circulo:
+    def __init__(self, radio):
+        self.radio = radio
+
+    def calcular_area(self):
+        # Fórmula: pi * r^2
+        return math.pi * (self.radio ** 2)
+
+    def calcular_perimetro(self):
+        # Fórmula: 2 * pi * r
+        return 2 * math.pi * self.radio
+
+# 2. Clase Rectángulo
+class Rectangulo:
+    def __init__(self, base, altura):
+        self.base = base
+        self.altura = altura
+
+    def calcular_area(self):
+        return self.base * self.altura
+
+    def calcular_perimetro(self):
+        return 2 * (self.base + self.altura)
+
+# 3. Clase Cuadrado
+class Cuadrado:
+    def __init__(self, lado):
+        self.lado = lado
+
+    def calcular_area(self):
+        return self.lado ** 2
+
+    def calcular_perimetro(self):
+        return 4 * self.lado
+
+# 4. Clase Triángulo Rectángulo
+class TrianguloRectangulo:
+    def __init__(self, base, altura):
+        self.base = base
+        self.altura = altura
+
+    def calcular_area(self):
+        return (self.base * self.altura) / 2
+
+    def calcular_hipotenusa(self):
+        # Teorema de Pitágoras: c = raíz(a^2 + b^2)
+        return math.sqrt((self.base ** 2) + (self.altura ** 2))
+
+    def calcular_perimetro(self):
+        return self.base + self.altura + self.calcular_hipotenusa()
+
+    def determinar_tipo(self):
+        # En geometría euclidiana, un triángulo rectángulo NUNCA puede ser equilátero
+        # porque la hipotenusa siempre es estrictamente mayor que los catetos.
+        # Por lo tanto, solo puede ser Isósceles (si base y altura son iguales) o Escaleno.
+        if self.base == self.altura:
+            return "Isósceles"
+        else:
+            return "Escaleno"
+
+# 5. Clase Rombo (Ejercicio Propuesto)
+class Rombo:
+    # Un rombo necesita sus dos diagonales para el área y su lado para el perímetro
+    def __init__(self, diagonal_mayor, diagonal_menor, lado):
+        self.diagonal_mayor = diagonal_mayor
+        self.diagonal_menor = diagonal_menor
+        self.lado = lado
+
+    def calcular_area(self):
+        return (self.diagonal_mayor * self.diagonal_menor) / 2
+
+    def calcular_perimetro(self):
+        return 4 * self.lado
+
+# 6. Clase Trapecio (Ejercicio Propuesto)
+class Trapecio:
+    # Para un trapecio cualquiera necesitamos bases, altura y sus otros dos lados
+    def __init__(self, base_mayor, base_menor, altura, lado_izquierdo, lado_derecho):
+        self.base_mayor = base_mayor
+        self.base_menor = base_menor
+        self.altura = altura
+        self.lado_izquierdo = lado_izquierdo
+        self.lado_derecho = lado_derecho
+
+    def calcular_area(self):
+        return ((self.base_mayor + self.base_menor) / 2) * self.altura
+
+    def calcular_perimetro(self):
+        return self.base_mayor + self.base_menor + self.lado_izquierdo + self.lado_derecho
+
+if __name__ == "__main__":
+    print("··· Análisis de Figuras Geométricas ···")
+
+    # Prueba del Círculo
+    mi_circulo = Circulo(5)
+    # Usamos {:.2f} para redondear los decimales a 2 en la impresión
+    print(f"\nCírculo (radio={mi_circulo.radio}):")
+    print(f"Área: {mi_circulo.calcular_area():.2f} cm² | Perímetro: {mi_circulo.calcular_perimetro():.2f} cm")
+
+    # Prueba del Triángulo Rectángulo
+    mi_triangulo = TrianguloRectangulo(3, 4)
+    print(f"\nTriángulo Rectángulo (base={mi_triangulo.base}, altura={mi_triangulo.altura}):")
+    print(f"Área: {mi_triangulo.calcular_area()} cm²")
+    print(f"Hipotenusa: {mi_triangulo.calcular_hipotenusa()} cm")
+    print(f"Perímetro: {mi_triangulo.calcular_perimetro()} cm")
+    print(f"Tipo: {mi_triangulo.determinar_tipo()}")
+
+    # Prueba del Trapecio
+    mi_trapecio = Trapecio(base_mayor=10, base_menor=6, altura=4, lado_izquierdo=5, lado_derecho=5)
+    print(f"\nTrapecio:")
+    print(f"Área: {mi_trapecio.calcular_area()} cm² | Perímetro: {mi_trapecio.calcular_perimetro()} cm")
+
+#PROBLEMA 5
+from enum import Enum
+
+# Definimos el tipo de cuenta usando Enum para evitar errores de escritura
+class TipoCuenta(Enum):
+    AHORROS = "Ahorros de bajo riesgo"
+    CORRIENTE = "Corriente transaccional"
+
+class CuentaBancaria:
+    def __init__(self, nombres, apellidos, numero_cuenta, tipo_cuenta, porcentaje_interes_mensual=0.0):
+        self.nombres = nombres
+        self.apellidos = apellidos
+        self.numero_cuenta = numero_cuenta
+        self.tipo_cuenta = tipo_cuenta
+
+        # El saldo se inicializa obligatoriamente en 0.
+        # Lo hacemos "privado" para que solo los métodos internos puedan modificarlo.
+        self.__saldo = 0.0
+
+        # Atributo del ejercicio propuesto
+        self.porcentaje_interes_mensual = porcentaje_interes_mensual
+
+    # Métodos de la cuenta
+    def consultar_saldo(self):
+        return self.__saldo
+
+    def consignar(self, valor):
+        if valor > 0:
+            self.__saldo += valor
+            print(f"Consignación exitosa: +${valor}. Nuevo saldo: ${self.__saldo}")
+        else:
+            print("Error: El valor a consignar debe ser mayor a cero.")
+
+    def retirar(self, valor):
+        if valor <= 0:
+            print("Error: El valor a retirar debe ser mayor a cero.")
+        elif valor > self.__saldo:
+            # Validación clave solicitada en el enunciado
+            print(f"Fondos insuficientes. Intentas retirar ${valor} pero tu saldo es ${self.__saldo}")
+        else:
+            self.__saldo -= valor
+            print(f"Retiro exitoso: -${valor}. Nuevo saldo: ${self.__saldo}")
+
+    # Método del ejercicio propuesto
+    def aplicar_interes(self):
+        # Calculamos el incremento basándonos en el porcentaje
+        interes_generado = self.__saldo * (self.porcentaje_interes_mensual / 100)
+        self.__saldo += interes_generado
+        # Usamos :.2f para mostrar solo dos decimales
+        print(f" Interés aplicado ({self.porcentaje_interes_mensual}%): +${interes_generado:.2f}. Nuevo saldo: ${self.__saldo:.2f}")
+
+    def imprimir(self):
+        print("\n--- Estado de la Cuenta Bancaria ---")
+        print(f"Titular: {self.nombres} {self.apellidos}")
+        print(f"Número de Cuenta: {self.numero_cuenta}")
+        print(f"Tipo de Cuenta: {self.tipo_cuenta.value}")
+        print(f"Tasa de Interés: {self.porcentaje_interes_mensual}%")
+        print(f"Saldo Actual: ${self.__saldo:.2f}")
+
+if __name__ == "__main__":
+    # 1. Creamos la cuenta bancaria
+    mi_cuenta = CuentaBancaria(
+        nombres="Pedro",
+        apellidos="Perez",
+        numero_cuenta="123456789",
+        tipo_cuenta=TipoCuenta.AHORROS,
+        porcentaje_interes_mensual=1.5
+    )
+
+    # 2. Mostramos el estado inicial (saldo en 0)
+    mi_cuenta.imprimir()
+
+    # 3. Probamos la lógica de la clase
+    print("--- Realizando transacciones ---")
+    mi_cuenta.consignar(150000)
+
+    # Intentamos retirar más de lo que hay para probar la validación
+    mi_cuenta.retirar(200000)
+
+    # Retiro normal
+    mi_cuenta.retirar(50000)
+
+    # 4. Aplicamos el interés sobre el saldo restante (100000)
+    mi_cuenta.aplicar_interes()
+
+    # 5. Estado final
+    mi_cuenta.imprimir()
