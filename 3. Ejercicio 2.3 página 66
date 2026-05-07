@@ -1,22 +1,25 @@
+#Ejercicio 2.3 pagina 66(es como la pagina 73)
 from enum import Enum
 
-# 1. Definimos los Enumeradores
+#tipos de combustibles
 class TipoCombustible(Enum):
     GASOLINA = "Gasolina"
     BIOETANOL = "Bioetanol"
-    DIESEL = "Diésel"
-    BIODIESEL = "Biodiésel"
+    DIESEL = "Diesel"
+    BIODIESEL = "Biodiesel"
     GAS_NATURAL = "Gas natural"
 
+#tipos de carro
 class TipoAutomovil(Enum):
-    CIUDAD = "Carro de ciudad"
+    CIUDAD = "Ciudad"
     SUBCOMPACTO = "Subcompacto"
     COMPACTO = "Compacto"
     FAMILIAR = "Familiar"
     EJECUTIVO = "Ejecutivo"
     SUV = "SUV"
 
-class Color(Enum):
+#colores
+class TipoColor(Enum):
     BLANCO = "Blanco"
     NEGRO = "Negro"
     ROJO = "Rojo"
@@ -27,132 +30,95 @@ class Color(Enum):
     VIOLETA = "Violeta"
 
 class Automovil:
-    # 2. Constructor
-    def __init__(self, marca, modelo, motor, tipo_combustible, tipo_automovil,
-                 num_puertas, cant_asientos, vel_maxima, color, es_automatico=True):
-        # Atributos protegidos con __
-        self.__marca = marca
-        self.__modelo = modelo
-        self.__motor = motor
-        self.__tipo_combustible = tipo_combustible
-        self.__tipo_automovil = tipo_automovil
-        self.__num_puertas = num_puertas
-        self.__cant_asientos = cant_asientos
-        self.__vel_maxima = vel_maxima
-        self.__color = color
-        self.__velocidad_actual = 0.0
+    # Carro completo
+    def __init__(self, marca, modelo, motor, combustible, tipo, puertas, asientos, vel_max, color):
+        self.marca = marca
+        self.modelo = modelo
+        self.motor = motor
+        self.combustible = combustible
+        self.tipo = tipo
+        self.puertas = puertas
+        self.asientos = asientos
+        self.velocidad_maxima = vel_max
+        self.color = color
+        self.velocidad_actual = 0 #em´pieza desde cero por defecto
 
-        # Nuevos atributos del Ejercicios propuestos
-        self.__es_automatico = es_automatico
-        self.__valor_total_multas = 0.0
-        self.__cantidad_multas = 0
-
-    # 3. Métodos Get y Set
-    def get_velocidad_actual(self):
-        return self.__velocidad_actual
-
-    def set_velocidad_actual(self, velocidad):
-        if velocidad <= self.__vel_maxima:
-            self.__velocidad_actual = velocidad
-        else:
-            self.__velocidad_actual = self.__vel_maxima
-            print(f"Error: No puedes establecer una velocidad mayor a la máxima ({self.__vel_maxima} km/h).")
-
-    # Get y Set propuestos para el atributo es_automatico
-    def get_es_automatico(self):
-        return self.__es_automatico
-
-    def set_es_automatico(self, valor_booleano):
-        self.__es_automatico = valor_booleano
-
-    # 4. Métodos de control de velocidad y multas (Ejercicios propuestos)
+    #aceleración y frenado
     def acelerar(self, incremento):
-        nueva_velocidad = self.__velocidad_actual + incremento
-
-        if nueva_velocidad > self.__vel_maxima:
-            self.__velocidad_actual = self.__vel_maxima
-            # Generamos la multa según el ejercicio propuesto
-            valor_multa = 150000.0  # Un valor fijo de ejemplo
-            self.__cantidad_multas += 1
-            self.__valor_total_multas += valor_multa
-            print(f"INFRACCIÓN Intentó acelerar a {nueva_velocidad} km/h superando el límite de {self.__vel_maxima} km/h.")
-            print(f"Se ha generado una multa de ${valor_multa}. Total acumulado: ${self.__valor_total_multas}")
+        if self.velocidad_actual + incremento <= self.velocidad_maxima:
+            self.velocidad_actual += incremento
         else:
-            self.__velocidad_actual = nueva_velocidad
-            print(f"Acelerando, velocidad actual: {self.__velocidad_actual} km/h")
+            print("No se puede superar la velocidad máxima permitida.")
 
     def desacelerar(self, decremento):
-        nueva_velocidad = self.__velocidad_actual - decremento
-
-        if nueva_velocidad < 0:
-            self.__velocidad_actual = 0
-            print("No es posible desacelerar a una velocidad negativa. El vehículo se ha detenido.")
+        if self.velocidad_actual - decremento >= 0:
+            self.velocidad_actual -= decremento
         else:
-            self.__velocidad_actual = nueva_velocidad
-            print(f"Desacelerando: velocidad actual: {self.__velocidad_actual} km/h")
+            print("No se puede desacelerar a una velocidad negativa.")
 
     def frenar(self):
-        self.__velocidad_actual = 0
-        print("Frenado total. Velocidad actual: 0 km/h")
+        self.velocidad_actual = 0
 
-    def tiempo_estimado_llegada(self, distancia_km):
-        if self.__velocidad_actual == 0:
-            return "El vehículo está detenido. Tiempo de llegada infinito."
-        tiempo = distancia_km / self.__velocidad_actual
-        return f"Tiempo estimado: {tiempo:.2f} horas"
+    #calcular tiempo de llegada
+    def calcular_tiempo_llegada(self, distancia):
+        if self.velocidad_actual == 0:
+            return float('inf')  # No llega nunca si está parado
+        return distancia / self.velocidad_actual
 
-    # Métodos para las multas
-    def tiene_multas(self):
-        return self.__cantidad_multas > 0
-
-    def total_multas(self):
-        return self.__valor_total_multas
-
-    # 5. Método Imprimir
+    #datos del estado actual
     def imprimir(self):
-        print("\n### Especificaciones del Automóvil ###")
-        print(f"Marca: {self.__marca} / Modelo: {self.__modelo} / Motor: {self.__motor}L")
-        print(f"Tipo: {self.__tipo_automovil.value} / Combustible: {self.__tipo_combustible.value}")
-        print(f"Color: {self.__color.value} / Transmisión Automática: {'Sí' if self.__es_automatico else 'No'}")
-        print(f"Puertas: {self.__num_puertas} / Asientos: {self.__cant_asientos}")
-        print(f"Velocidad Máxima: {self.__vel_maxima} km/h")
-        print(f"Velocidad Actual: {self.__velocidad_actual} km/h")
-        print("\n")
+        print(f"Marca: {self.marca}")
+        print(f"Modelo: {self.modelo}")
+        print(f"Motor: {self.motor} litros")
+        print(f"Combustible: {self.combustible.value}")
+        print(f"Tipo: {self.tipo.value}")
+        print(f"Puertas: {self.puertas}")
+        print(f"Asientos: {self.asientos}")
+        print(f"Velocidad Máxima: {self.velocidad_maxima} km/h")
+        print(f"Color: {self.color.value}")
+        print(f"Velocidad Actual: {self.velocidad_actual} km/h")
 
-# 6. Método Main
-if __name__ == "__main__":
-    # Creamos un automóvil con velocidad máxima de 110 km/h
-    mi_carro = Automovil(
-        marca="Ford",
-        modelo=2018,
-        motor=3,
-        tipo_combustible=TipoCombustible.GASOLINA,
-        tipo_automovil=TipoAutomovil.EJECUTIVO,
-        num_puertas=5,
-        cant_asientos=6,
-        vel_maxima=250,
-        color=Color.NEGRO,
-        es_automatico=True
-    )
 
-    mi_carro.imprimir()
+#se piden datos basicos
+marca = input("Ingrese la marca: ")
+modelo = int(input("Ingrese el modelo (año): "))
+motor = float(input("Ingrese el cilindraje del motor (litros): "))
+puertas = int(input("Ingrese el número de puertas: "))
+asientos = int(input("Ingrese la cantidad de asientos: "))
+vel_max = int(input("Ingrese la velocidad máxima (km/h): "))
 
-    # Secuencia solicitada en el enunciado
-    print("### Iniciando recorrido ###")
+#combustible,tipo y color
+print("\nTipos de combustible: GASOLINA, BIOETANOL, DIESEL, BIODIESEL, GAS_NATURAL")
+combustible_str = input("Seleccione el combustible: ").upper()
+combustible = TipoCombustible[combustible_str]
 
-    # 1. Colocar su velocidad actual en 100 km/h usando el Set
-    mi_carro.set_velocidad_actual(100)
-    print(f"Velocidad configurada a: {mi_carro.get_velocidad_actual()} km/h")
+print("\nTipos de automóvil: CIUDAD, SUBCOMPACTO, COMPACTO, FAMILIAR, EJECUTIVO, SUV")
+tipo_str = input("Seleccione el tipo de auto: ").upper()
+tipo_auto = TipoAutomovil[tipo_str]
 
-    # 2. Aumentar su velocidad en 20 km/h (¡Esto superará la vel. máxima de 110 y generará multa!)
-    mi_carro.acelerar(20)
+print("\nColores: BLANCO, NEGRO, ROJO, NARANJA, AMARILLO, VERDE, AZUL, VIOLETA")
+color_str = input("Seleccione el color: ").upper()
+color_auto = TipoColor[color_str]
 
-    # 3. Decrementar su velocidad en 50 km/h
-    mi_carro.desacelerar(50)
+#La instancia
+auto1 = Automovil(marca, modelo, motor, combustible,
+                  tipo_auto, puertas, asientos, vel_max, color_auto)
 
-    # 4. Frenar
-    mi_carro.frenar()
+print("\nEl automóvil es:")
+auto1.imprimir()
+#velocidad inicial en 100 km/h
+auto1.velocidad_actual = 100
+print(f"Velocidad actual = {auto1.velocidad_actual} km/h")
 
-    # Verificamos multas al final
-    if mi_carro.tiene_multas():
-        print(f"\nReporte de tránsito: El vehículo tiene multas por un total de ${mi_carro.total_multas()}")
+#Se aumenta velocidad en 20 km/h
+auto1.acelerar(20)
+print(f"Velocidad actual = {auto1.velocidad_actual} km/h")
+
+#Se reduce velocidad en 50 km/h
+auto1.desacelerar(50)
+print(f"Velocidad actual = {auto1.velocidad_actual} km/h")
+
+#Se frena
+auto1.frenar()
+print(f"Velocidad actual = {auto1.velocidad_actual} km/h")
+
