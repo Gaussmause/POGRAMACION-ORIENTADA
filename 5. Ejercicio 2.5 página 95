@@ -1,86 +1,76 @@
+#ejercicio 2.5 pagina 95
 from enum import Enum
-
-# Definimos el tipo de cuenta usando Enum para evitar errores de escritura
-class TipoCuenta(Enum):
-    AHORROS = "Ahorros de bajo riesgo"
-    CORRIENTE = "Corriente transaccional"
+class Tipo(Enum):
+    AHORROS = "AHORROS"
+    CORRIENTE = "CORRIENTE"
 
 class CuentaBancaria:
-    def __init__(self, nombres, apellidos, numero_cuenta, tipo_cuenta, porcentaje_interes_mensual=0.0):
-        self.nombres = nombres
-        self.apellidos = apellidos
+    #Constructor
+    def __init__(self, nombres, apellidos, numero_cuenta, tipo_cuenta, interes_mensual=0.0):
+        self.nombres_titular = nombres
+        self.apellidos_titular = apellidos
         self.numero_cuenta = numero_cuenta
         self.tipo_cuenta = tipo_cuenta
+        self.saldo = 0.0
+        self.porcentaje_interes = interes_mensual
 
-        # El saldo se inicializa obligatoriamente en 0.
-        # Lo hacemos "privado" para que solo los métodos internos puedan modificarlo.
-        self.__saldo = 0.0
+    def aplicar_interes(self):
+        interes = self.saldo * (self.porcentaje_interes / 100)
+        self.saldo += interes
+        print(f"Intereses aplicados: ${interes}. Nuevo saldo: ${self.saldo}")
 
-        # Atributo del ejercicio propuesto
-        self.porcentaje_interes_mensual = porcentaje_interes_mensual
+    #mostrar datos en pantalla
+    def imprimir(self):
+        print(f"Nombres del titular = {self.nombres_titular}")
+        print(f"Apellidos del titular = {self.apellidos_titular}")
+        print(f"Número de cuenta = {self.numero_cuenta}")
+        print(f"Tipo de cuenta = {self.tipo_cuenta.name}")
+        print(f"Saldo = {self.saldo}")
 
-    # Métodos de la cuenta
+    #consultar el saldo
     def consultar_saldo(self):
-        return self.__saldo
+        print(f"El saldo actual es = {self.saldo}")
 
+    #consignar plata
     def consignar(self, valor):
         if valor > 0:
-            self.__saldo += valor
-            print(f"Consignación exitosa: +${valor}. Nuevo saldo: ${self.__saldo}")
-        else:
-            print("Error: El valor a consignar debe ser mayor a cero.")
+            self.saldo += valor
+            print(f"Se ha consignado ${valor}. El nuevo saldo es ${self.saldo}")
+            return True
+        return False
 
+    #retirar plata(si hay suficiente)
     def retirar(self, valor):
-        if valor <= 0:
-            print("Error: El valor a retirar debe ser mayor a cero.")
-        elif valor > self.__saldo:
-            # Validación clave solicitada en el enunciado
-            print(f"Fondos insuficientes. Intentas retirar ${valor} pero tu saldo es ${self.__saldo}")
+        if 0 < valor <= self.saldo:
+            self.saldo -= valor
+            print(f"Se ha retirado ${valor}. El nuevo saldo es ${self.saldo}")
+            return True
         else:
-            self.__saldo -= valor
-            print(f"Retiro exitoso: -${valor}. Nuevo saldo: ${self.__saldo}")
+            print("No es posible retirar esa cantidad.")
+            return False
 
-    # Método del ejercicio propuesto
-    def aplicar_interes(self):
-        # Calculamos el incremento basándonos en el porcentaje
-        interes_generado = self.__saldo * (self.porcentaje_interes_mensual / 100)
-        self.__saldo += interes_generado
-        # Usamos :.2f para mostrar solo dos decimales
-        print(f" Interés aplicado ({self.porcentaje_interes_mensual}%): +${interes_generado:.2f}. Nuevo saldo: ${self.__saldo:.2f}")
 
-    def imprimir(self):
-        print("\n--- Estado de la Cuenta Bancaria ---")
-        print(f"Titular: {self.nombres} {self.apellidos}")
-        print(f"Número de Cuenta: {self.numero_cuenta}")
-        print(f"Tipo de Cuenta: {self.tipo_cuenta.value}")
-        print(f"Tasa de Interés: {self.porcentaje_interes_mensual}%")
-        print(f"Saldo Actual: ${self.__saldo:.2f}")
+#instancias
+nombres = input("Ingrese los nombres del titular: ")
+apellidos = input("Ingrese los apellidos del titular: ")
+numero_cuenta = int(input("Ingrese el número de cuenta: "))
 
-if __name__ == "__main__":
-    # 1. Creamos la cuenta bancaria
-    mi_cuenta = CuentaBancaria(
-        nombres="Pedro",
-        apellidos="Perez",
-        numero_cuenta="123456789",
-        tipo_cuenta=TipoCuenta.AHORROS,
-        porcentaje_interes_mensual=1.5
-    )
+print("Tipos de cuenta disponibles:")
+print("1. AHORROS")
+print("2. CORRIENTE")
+opcion = int(input("Seleccione el tipo de cuenta (1 o 2): "))
 
-    # 2. Mostramos el estado inicial (saldo en 0)
-    mi_cuenta.imprimir()
+if opcion == 1:
+    tipo_cuenta = Tipo.AHORROS
+else:
+    tipo_cuenta = Tipo.CORRIENTE
 
-    # 3. Probamos la lógica de la clase
-    print("--- Realizando transacciones ---")
-    mi_cuenta.consignar(150000)
+interes = float(input("Ingrese el porcentaje de interés mensual: "))
+#acá ya se cre la cuenta
+cuenta = CuentaBancaria(nombres, apellidos, numero_cuenta, tipo_cuenta, interes)
 
-    # Intentamos retirar más de lo que hay para probar la validación
-    mi_cuenta.retirar(200000)
+cuenta.imprimir()
 
-    # Retiro normal
-    mi_cuenta.retirar(50000)
-
-    # 4. Aplicamos el interés sobre el saldo restante (100000)
-    mi_cuenta.aplicar_interes()
-
-    # 5. Estado final
-    mi_cuenta.imprimir()
+cuenta.consignar(200000)
+cuenta.consignar(300000)
+cuenta.retirar(400000)
